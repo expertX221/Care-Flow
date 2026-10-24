@@ -1,0 +1,6 @@
+import {NextResponse} from 'next/server';
+import {availableSlots,createAppointment,manageAppointment,BookingError} from '../../../../../lib/appointments-server';
+export const dynamic='force-dynamic';
+const respond=(error:unknown)=>NextResponse.json({error:error instanceof BookingError?error.message:'Booking system unavailable'},{status:error instanceof BookingError?error.status:503,headers:{'Cache-Control':'no-store'}});
+export async function GET(request:Request,{params}:{params:Promise<{id:string}>}){try{const {id}=await params,url=new URL(request.url);return NextResponse.json(await availableSlots(id,url.searchParams.get('date')||'',url.searchParams.get('department')||''),{headers:{'Cache-Control':'no-store'}})}catch(e){return respond(e)}}
+export async function POST(request:Request,{params}:{params:Promise<{id:string}>}){try{const {id}=await params;const raw=await request.text();if(raw.length>4000)return NextResponse.json({error:'Request too large'},{status:413});const body=JSON.parse(raw);if(body.action==='book')return NextResponse.json({appointment:await createAppointment(id,body,request)},{status:201,headers:{'Cache-Control':'no-store'}});return NextResponse.json(await manageAppointment(id,request,body),{headers:{'Cache-Control':'no-store'}})}catch(e){return respond(e)}}
