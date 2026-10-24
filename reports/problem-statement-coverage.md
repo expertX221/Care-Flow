@@ -5,7 +5,7 @@ Date: 24 October 2026. Fictional data only.
 | Requested area | Prototype coverage |
 |---|---|
 | Simple registration | Implemented: five questions, Back preserves answers, optional mobile, eight department cards, help-desk route. |
-| Native languages | Six dictionaries: English, Hindi, Tamil, Telugu, Malayalam, Kannada; registration, map labels, landmarks and core flows translated. Native-speaker review remains required. Some server errors and audit records remain English. |
+| Native languages | Six dictionaries: English, Hindi, Tamil, Telugu, Malayalam, Kannada; registration, map labels, landmarks and core flows translated. Native-speaker review remains required. Action errors and audit records are now translated in the interface. |
 | Accessibility | Three text sizes, assisted read-aloud questions, contrast, reduced motion, labelled controls, keyboard map actions, step-free routes. Formal WCAG AA certification and assistive-device usability testing are not complete. |
 | Queue and estimates | Sequential tokens, first-name slips, last-ten consultation mean plus explicit delay, rounding to five minutes, support priority with aging, step-away/rejoin. |
 | Alerts | Three-ahead banner, simulated SMS and supported browser vibration/speech/notification; called token screen. Physical device delivery and installed voices are unverified. |
@@ -20,7 +20,7 @@ Date: 24 October 2026. Fictional data only.
 
 ## Automated evidence
 
-- 20 Node test cases passed, including malformed inputs, state recovery, fairness, idempotent registration and all hospital-place pairs in normal and step-free modes.
+- 28 Node test cases passed, including malformed inputs, state recovery, fairness, idempotent registration and all hospital-place pairs in normal and step-free modes.
 - Six Python estimator cases passed.
 - TypeScript passed after fixing callback syntax and inferred state types.
 - Dependency audit reported zero known production dependency vulnerabilities at the time checked.
@@ -52,3 +52,5 @@ Phone testing found a small footer/header overflow and the older illustration's 
 Use three tabs with the same room, confirm Cloud connected, set a fresh fictional room, unlock Staff, allow audio only after a user gesture, preload maps, keep a reliable connection and retain this source ZIP. Do not promise camera, voices, notifications, vibration or installation on an untested device. Default demo PIN and public source are not production hospital security. Do not enter real health or identity data.
 
 Final browser additions: staff PIN unlock, emergency request visible in Staff and acknowledgment, Malayalam tablet wrap, saved language after reload, actual largest-text layout checks at 360/768/1440 across all six languages. A long Tamil now-serving label overflow was located and fixed. Camera/microphone permissions and physical notification delivery were not exercised.
+
+Device/accessibility follow-up: eight added automated checks cover permission rejection, service-worker notifications, camera cleanup, six-language message coverage, offline shell/API behavior, palette contrast and eight-department cached visits. Registration retry IDs remain stable. Background controls are inert while dialogs are open; SVG place buttons, progress and microphone status are exposed to assistive technology. Physical hardware tests, native-speaker review and formal accessibility certification still require human validation. SMS is intentionally in-app only, as requested.

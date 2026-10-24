@@ -53,8 +53,12 @@ Camera QR scanning uses BarcodeDetector when available. Speech recognition, lang
 
 ## Verification
 
-`npm test`: 20 automated queue, input, storage and graph checks. `python -m unittest discover -s python -p 'test_*.py'`: six estimator checks. `npx tsc --noEmit` checks TypeScript. `npm run test:api` creates an isolated fictional room and checks 17 API scenario groups against `BASE_URL` (defaults to production); use `CAREFLOW_TEST_STAFF_PIN` if configured. No test deletes unrelated data. See `reports/problem-statement-coverage.md` for coverage and remaining limits.
+`npm test`: 28 automated queue, input, storage and graph checks. `python -m unittest discover -s python -p 'test_*.py'`: six estimator checks. `npx tsc --noEmit` checks TypeScript. `npm run test:api` creates an isolated fictional room and checks 17 API scenario groups against `BASE_URL` (defaults to production); use `CAREFLOW_TEST_STAFF_PIN` if configured. No test deletes unrelated data. See `reports/problem-statement-coverage.md` for coverage and remaining limits.
 
 ## Next steps
 
 Native-speaker and clinical review; full WCAG audit and patient usability sessions; hospital-verified layouts; individual staff authentication; measured load/latency and rate limits; real notification integration. This is a prototype, not a clinical deployment.
+
+## Device and accessibility hardening
+
+Camera failures release active tracks and show a translated token-entry fallback. Microphone errors show translated text and recording stops on step change or dialog close. Notifications use service-worker delivery on supported mobile browsers, with an in-app fallback; Settings includes a test alert. Read-aloud controls report missing language voices. Dialogs isolate background controls, registration steps announce headings and progress, and the map exposes keyboard-accessible places. Primary text, secondary text and emergency controls pass an automated palette contrast check. These checks do not constitute a complete WCAG certification or physical-device verification. SMS remains an in-app simulation by user choice.
