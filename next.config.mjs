@@ -1,0 +1,1 @@
+export default {reactStrictMode:true,distDir:process.env.VERCEL?'.next':process.env.CAREFLOW_DEV==='1'?'.careflow-dev':'.careflow-build',devIndicators:false,experimental:{webpackBuildWorker:false,cpus:1}};

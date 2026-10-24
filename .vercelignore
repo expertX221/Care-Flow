@@ -1,0 +1,7 @@
+node_modules
+.next
+.careflow-next
+.careflow-build
+.careflow-dev
+.env.local
+*.log

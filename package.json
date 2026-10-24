@@ -1,0 +1,33 @@
+{
+  "name": "careflow",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start --hostname 0.0.0.0",
+    "test": "node --test tests/queue.test.mjs"
+  },
+  "dependencies": {
+    "next": "15.5.28",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "pg": "^8.16.3",
+    "@phosphor-icons/react": "^2.1.10",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.15.5",
+    "@types/qrcode": "^1.5.6"
+  },
+  "overrides": {
+    "source-map-js": "1.2.2",
+    "nanoid": "3.3.18",
+    "postcss": "8.5.31"
+  }
+}

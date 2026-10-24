@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.careflow-next/
+.careflow-build/
+.careflow-dev/
+.env*
+!.env.example
+*.log
+__pycache__/
+.vercel
+.env*.local
