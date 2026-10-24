@@ -1,49 +1,60 @@
 # CareFlow
 
-CareFlow is a fictional hospital queue and wayfinding app based on the selected bright blue, lavender and coral design. It uses Next.js, React, TypeScript, JavaScript, HTML through JSX, CSS, Node.js, Neon Postgres, and an optional Python estimator.
+Government-hospital visitors can struggle to register, understand their queue, and find the room on their OPD slip. CareFlow demonstrates one connected journey using a fictional hospital and fictional visitors.
+
+Built for patients, helpers, registration staff and waiting-room displays. The selected white/lavender, blue/coral interface uses an illustrated hospital plus a separate graph-driven floor plan.
 
 ## Run in VS Code
 
-Open this folder. Run `npm ci`, then `npm run dev`. Open http://localhost:3000. For a production server run `npm run build`, then `npm start`. This workspace already contains the local database configuration; it is excluded from Git and deployment uploads.
+Use Node.js 22 or newer. Open this folder, run `npm ci`, then `npm run dev`, and open http://localhost:3000. For production: `npm run build` then `npm start`. Copy `.env.example` to `.env.local` and set a server-only Neon `DATABASE_URL` for connected queues. Without a working database, the browser demonstrates local state; shared staff actions need a connection. Never enter real patient information.
 
-To configure a fresh checkout, copy `.env.example` to `.env.local` and set your own Neon `DATABASE_URL`. Never expose this as a NEXT_PUBLIC variable.
+`STAFF_PIN` is optional; the prototype default is **2468**, shown on the login screen. A real hospital requires individual staff identities, appropriate permissions, retention rules and audited access. This public demo PIN is not clinical authentication.
 
-## Working features
+## Screens
 
-- Patient, staff and waiting-room views, mobile navigation, keyboard controls, dialog focus management.
-- Six-language primary patient workflows: English, Hindi, Tamil, Telugu, Malayalam and Kannada. Some error messages, audit entries, names and supplementary explanations remain English. Translations need native-speaker review.
-- Three-step check-in, fictional patient names, department selection, assisted/support priority, voice input when the browser supports it.
-- Unique sequential department tokens, genuine QR encoding, printable slip, token lookup, step-away and rejoin, post-visit rating.
-- Four department queues; staff call-next, complete visits, skip/rejoin and doctor break/resume controls. Consultation durations update an EWMA estimate. Arrival aging limits starvation.
-- Neon stores each shared demo room. Database row locks serialize simultaneous actions; five concurrent registrations were verified without lost updates or duplicate tokens.
-- Patient, staff and board synchronize by polling every two seconds. Use Connect another screen to open the same opaque room link on another browser or device. This is polling, not a WebSocket service.
-- The selected 3D illustration, pointer-driven perspective motion, floor controls, animated token changes, accessible route toggle and real Dijkstra graph directions for a fictional building. The picture is an illustration, not a true WebGL model or a measured indoor positioning system; its baked-in glowing route is decorative. Route steps and distances are computed separately.
-- Emergency review requests, staff warning panel and acknowledgment. This app does not contact emergency services. Qualified staff determine urgency.
-- Large type, contrast, assisted mode, reduced-motion controls and device vibration when supported. Read-aloud and voice input depend on browser permission, installed voices and language availability.
-- Local slip/state cache; service worker caches a previously loaded shell and static assets. Offline staff mutations are not queued; reconnect before changing shared data. Offline reload depends on previously cached resources. No push/SMS service is connected.
+- Patient home: first-visit language choice, four main actions and a live token.
+- Registration: five questions, retained Back answers, optional phone, department cards, help desk and assisted mode.
+- Slip / My turn: QR, token, first name, department, room, doctor, queue estimate, read aloud, print and image download.
+- Find: searchable three-floor SVG schematic, landmarks, Dijkstra routing, step-free toggle and lost-patient help card.
+- Emergency: visible access before registration, emergency signs, route to Casualty, 112/108 links and a demo staff-review request.
+- Settings: six languages, three text sizes, contrast, reduced motion, assisted mode, read aloud and browser alerts.
+- `/staff`: PIN gate, eight queues, call/complete/no-show/end/transfer, doctor status/delay, occupancy and urgent flags.
+- `/counter`: staff tools with assisted registration and printable slips.
+- `/board`: now serving, next three tokens, doctor delays, spoken announcements and optional English/Hindi alternation.
+- Demo controls: add 20 fictional visitors, automatic accelerated calls and reset this room.
 
-## Demo in under five minutes
+Use **Connect another screen** to open the same room on patient, staff and board screens. Database transactions serialize changes; polling every 750 ms plus BroadcastChannel updates screens. Network latency means delivery within one second is a target, not a guarantee. Patient responses hide other visitors' names and private claim/session values; staff mutations require the room's staff cookie.
 
-1. Open Patient. Select Hindi, choose New check-in, enter a fictional name, choose General Medicine, and confirm.
-2. Show the QR slip, token and current waiting estimate. Select Guide me to my room and compare lift/stair directions.
-3. Choose Connect another screen. Open Staff and Live board links alongside Patient with the same room ID.
-4. In Staff, press Call next until your token is called. Patient and board update within two seconds; supported phones vibrate.
-5. Pause/resume the doctor to change estimates. Request Emergency review and acknowledge it in Staff.
+## Emergencies
 
-## Python estimates
+Digital queues never determine clinical urgency or require a token for emergency care. Seek nearby qualified staff immediately. The prototype flags requests to another demo screen; it does not contact real hospital staff or dispatch emergency services. 112 is the national emergency number; ambulance service 108 is available in participating areas. Only qualified staff assess urgency.
 
-Run `python python/predict.py` to start the optional standard-library service on port 8000. Set `PREDICTION_URL=http://127.0.0.1:8000` locally. The `/api/predict` Node endpoint validates input and proxies Python, with a Node EWMA fallback. On Vercel use an externally hosted HTTPS Python service or leave the variable unset. Python does not need a paid API.
+## Design and estimates
 
-## Deployment to Vercel
+Assisted mode increases text size, reads registration questions and defaults to step-free directions. Large controls, visible keyboard focus, icons with labels, language selection and landmark directions address different literacy and mobility needs. The map is a fictional schematic, not measured indoor positioning. Its graph supplies route distances; the decorative 3D image is not a navigable building model.
 
-Framework: Next.js. Install: `npm ci`. Build: `npm run build`. Add `DATABASE_URL` in Vercel for Preview and Production. The secret must be entered as a server-only environment variable. `.vercelignore` excludes local secrets, generated builds, logs and dependencies.
+Displayed wait = people ahead × mean of the latest ten recorded consultations + configured doctor delay, rounded to five minutes and shown as “about”. Initial samples come from department data. Arrival aging reduces starvation of standard visits. The optional Python `/api/predict` example remains an EWMA demonstration and does not supply the primary displayed wait.
 
-Local production builds use `.careflow-build`; Vercel uses the standard `.next` directory. Set `CAREFLOW_DEV=1` to isolate development output from a production build when running both concurrently.
+## Vercel from GitHub
 
-## Checks
+1. Import `expertX221/Care-Flow`, select Next.js and repository root.
+2. Install `npm ci`; build `npm run build`; leave Output Directory at framework default.
+3. Set server-only `DATABASE_URL` in the intended Preview/Production environments. Optionally set `STAFF_PIN`.
+4. Deploy and open the generated URL. Next.js owns `/staff`, `/counter`, `/board`, `/find`; no SPA catch-all rewrite is required, so direct page refresh works.
+5. Never publish `.env.local`, CLI login files, `.vercel`, dependencies or generated builds.
 
-`npm test` runs eight queue/routing tests. `npm run build` compiles and checks TypeScript. `node scripts/verify-database.mjs` verifies five simultaneous Neon registrations in a new fictional test room. The test deliberately retains that room; it does not delete data.
+The original Next.js/TypeScript/Neon stack was retained from the user's deployed project. This intentionally differs from the pasted checklist's alternative Vite/plain-JavaScript/no-backend starting recipe. Node API routes run with the app on Vercel; no separate Express server is required.
 
-## Limits
+## Offline and device features
 
-This is a hackathon demonstration, not a clinical product. Room links act as demo access capabilities; anyone with a link can operate Staff controls. No real patient information should be entered. Clinical authentication, privacy retention, rate limits and hospital deployment review are required before a real rollout. No payment, geolocation, diagnosis, SMS, browser push or emergency dispatch is implemented. Public GitHub publication, pitch deck and recorded demo video are separate deliverables and have not been produced by this build.
+The service worker caches the loaded shell, assets and static chunks; local storage retains the last known slip and queue. Offline position is explicitly stale. Offline registration is held locally with an idempotency key and sent after reconnecting. Staff mutations require a confirmed connection. Install is offered only when the browser exposes its install prompt. Full offline reload requires a successful prior online load and cache completion.
+
+Camera QR scanning uses BarcodeDetector when available. Speech recognition, language voices, vibration, sound, notifications and installation depend on browser/device support and permission. Simulated SMS is an on-screen demonstration; no SMS or push provider is connected.
+
+## Verification
+
+`npm test`: 20 automated queue, input, storage and graph checks. `python -m unittest discover -s python -p 'test_*.py'`: six estimator checks. `npx tsc --noEmit` checks TypeScript. `npm run test:api` creates an isolated fictional room and checks 17 API scenario groups against `BASE_URL` (defaults to production); use `CAREFLOW_TEST_STAFF_PIN` if configured. No test deletes unrelated data. See `reports/problem-statement-coverage.md` for coverage and remaining limits.
+
+## Next steps
+
+Native-speaker and clinical review; full WCAG audit and patient usability sessions; hospital-verified layouts; individual staff authentication; measured load/latency and rate limits; real notification integration. This is a prototype, not a clinical deployment.

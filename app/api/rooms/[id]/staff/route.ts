@@ -1,0 +1,3 @@
+import {NextResponse} from 'next/server';
+import {staffLogin,cookieName} from '../../../../../lib/server';
+export async function POST(request:Request,{params}:{params:Promise<{id:string}>}){const {id}=await params;if(!/^[0-9a-f-]{36}$/i.test(id))return NextResponse.json({error:'Invalid room'},{status:400});try{const data=await request.json();if(typeof data.pin!=='string')throw Error('Invalid PIN');const token=await staffLogin(id,data.pin);const response=NextResponse.json({staff:true});response.cookies.set(cookieName(id,true),token,{httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'lax',path:'/',maxAge:28800});return response}catch{return NextResponse.json({error:'Staff PIN not accepted'},{status:403})}}

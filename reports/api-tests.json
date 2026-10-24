@@ -1,0 +1,76 @@
+{
+  "base": "https://care-flow-gmyueqp0g-create-projects1.vercel.app",
+  "room": "44b657d2-ccc9-42b1-8691-6771fd1f00e8",
+  "results": [
+    {
+      "name": "Production HTML and image assets load",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid room ID rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Unknown room returns 404",
+      "status": "passed"
+    },
+    {
+      "name": "Create isolated database room",
+      "status": "passed"
+    },
+    {
+      "name": "Null action rejected as bad input",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed JSON rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid registration rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Five concurrent registrations retain unique tokens",
+      "status": "passed"
+    },
+    {
+      "name": "Anonymous staff actions and another patient token are protected",
+      "status": "passed"
+    },
+    {
+      "name": "Staff PIN rejects incorrect values and unlocks staff controls",
+      "status": "passed"
+    },
+    {
+      "name": "Doctor break blocks call-next; resume restores it",
+      "status": "passed"
+    },
+    {
+      "name": "Call-next serves support-priority token",
+      "status": "passed"
+    },
+    {
+      "name": "Complete visit and enforce transition rules",
+      "status": "passed"
+    },
+    {
+      "name": "Step-away and rejoin persist",
+      "status": "passed"
+    },
+    {
+      "name": "Assistance flag deduplicates and can be acknowledged",
+      "status": "passed"
+    },
+    {
+      "name": "Feedback accepts valid ratings and rejects invalid ratings",
+      "status": "passed"
+    },
+    {
+      "name": "Estimator returns finite values and validates inputs",
+      "status": "passed"
+    }
+  ],
+  "passed": 17,
+  "failed": 0
+}

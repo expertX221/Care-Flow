@@ -1,0 +1,9 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {places,edges,shortestPath,placeName} from '../src/data/hospital.mjs';
+import {departments,initialState,applyAction,estimate,upgradeState} from '../lib/queue.mjs';
+test('every hospital destination is reachable in both route modes, including step-free paths',()=>{for(const a of places)for(const b of places)for(const avoid of [true,false]){const r=shortestPath(a.id,b.id,avoid);assert.equal(r.path[0],a.id);assert.equal(r.path.at(-1),b.id);assert.ok(Number.isFinite(r.distance));if(avoid)for(let i=1;i<r.path.length;i++){const edge=edges.find(e=>(e.from===r.path[i-1]&&e.to===r.path[i])||(e.to===r.path[i-1]&&e.from===r.path[i]));assert.ok(edge&&!edge.stairs)}}});
+test('eight OPDs and every place have six language labels',()=>{assert.equal(departments.length,8);for(const d of departments){assert.ok(places.some(p=>p.id===d.place));for(const l of ['en','hi','ta','te','ml','kn'])assert.ok(d.labels[l])}for(const p of places)for(const l of ['en','hi','ta','te','ml','kn'])assert.ok(placeName(p,l));});
+test('registration retries are idempotent and only retain first name',()=>{let s=initialState();const a={type:'register',name:'Fictional Visitor',age:70,gender:'female',department:'general',priority:1,requestId:'stable-retry'};s=applyAction(s,a);const count=s.patients.length;s=applyAction(s,a);assert.equal(s.patients.length,count);assert.equal(s.patients.at(-1).name,'Fictional');});
+test('wait estimates use the last ten consultations and explicit doctor delay',()=>{let s=initialState();s.doctors.general.samples=[100,...Array(10).fill(5)];s.doctors.general.status='delayed';s.doctors.general.delayMinutes=20;assert.equal(estimate(s,'A-024').min,35);});
+test('existing room state upgrades to all eight departments',()=>{const s=initialState();delete s.doctors.ent;delete s.counters.ent;const u=upgradeState(s);assert.ok(u.doctors.ent);assert.equal(u.counters.ent,0)});

@@ -1,0 +1,1 @@
+export const samplePatients=[['Anu','general'],['Ravi','pediatric'],['Maya','women'],['Dev','ortho'],['Tara','ent'],['Kiran','eyes'],['Meena','skin']].map(([name,department])=>({name,department,priority:0}));
