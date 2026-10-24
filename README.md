@@ -73,3 +73,7 @@ The language picker appears on every fresh opening/reload, even when a previous 
 ## Patient entry flow
 
 Every fresh load asks for language, then presents Register a new visit or Log in to my visit. No patient token, assigned room, floor or personal dashboard is displayed before confirmation. Registering issues the patient’s own token; existing visits open through a saved server session or the private QR/code on the slip. Private codes include the original demo-room identifier for returning from another device. Seeded demo patients remain in staff/public queues but are never automatically assigned to a visitor. This is visit access, not an email/password account system. Emergency guidance stays accessible before entry.
+
+## Floor-plan layout fix (October 2026)
+
+The first-floor schematic previously rendered the washroom at `(12, 28)` and A101 at `(15, 25)`, so their visible SVG hit boxes overlapped. The floor-plan renderer now uses separate, non-overlapping screen coordinates in `src/data/floor-plan.mjs`. It draws shared right-angled corridors rather than diagonal star connections, and highlights the selected route along the same corridors. Small screens can scroll the SVG horizontally instead of shrinking labels to unreadable sizes. The underlying hospital graph and shortest-path logic remain unchanged; the floor drawing is illustrative, not a measured indoor map. `tests/floor-plan.test.mjs` checks node spacing and all same-floor segment paths.
