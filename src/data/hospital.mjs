@@ -1,3 +1,4 @@
+import {extendedDepartments} from './departments.mjs';
 const names=(en,hi,ta,te,ml,kn)=>({en,hi,ta,te,ml,kn});
 export const floorNames=names(['Ground floor','First floor','Second floor'],['भूतल','पहली मंज़िल','दूसरी मंज़िल'],['தரைத் தளம்','முதல் தளம்','இரண்டாம் தளம்'],['నేల అంతస్తు','మొదటి అంతస్తు','రెండవ అంతస్తు'],['താഴത്തെ നില','ഒന്നാം നില','രണ്ടാം നില'],['ನೆಲ ಮಹಡಿ','ಮೊದಲ ಮಹಡಿ','ಎರಡನೇ ಮಹಡಿ']);
 export const types={
@@ -25,10 +26,11 @@ for(let f=0;f<3;f++){add('corridor-'+f,'corridor',f,50,55,'lift');add('lift-'+f,
 add('entrance','entrance',0,50,92,'lift');add('registration','registration',0,20,72);add('help','help',0,30,55);add('emergency','emergency',0,83,72,'red');add('pharmacy','pharmacy',0,83,28);add('lab','lab',0,65,28,'water');add('xray','xray',0,65,42);add('water','water',0,30,28,'water');add('wheelchair','wheelchair',0,20,88);add('ramp','ramp',0,50,83,'lift');
 for(let i=1;i<=8;i++)add('opd-'+i,'room',1,[15,35,55,78][(i-1)%4],i<=4?25:43,'blue',i);
 add('waiting','waiting',1,82,78,'water');for(let i=4;i<=6;i++)add('ward-'+i,'ward',2,[20,50,80][i-4],30,'blue',i);add('nurses','nurses',2,25,75,'lift');
+for(const p of places){p.roomCode=extendedDepartments.find(d=>d.place===p.id)?.room||({'ward-4':'M204','ward-5':'S205','ward-6':'C206',registration:'R001',emergency:'E002',lab:'L003',pharmacy:'P004',xray:'X005'}[p.id])||null}
 export const edges=[];
 function link(a,b,metres,stairs=false){edges.push({from:a,to:b,metres,stairs})}
 for(const p of places){if(p.type==='corridor')continue;if(p.id==='entrance'||p.id==='ramp')continue;const c=places.find(n=>n.id==='corridor-'+p.floor);link(c.id,p.id,Math.max(4,Math.round(Math.hypot(p.x-c.x,p.y-c.y)*.6)))}
 link('entrance','ramp',8);link('ramp','corridor-0',17);for(let f=0;f<2;f++){link('lift-'+f,'lift-'+(f+1),15);link('stairs-'+f,'stairs-'+(f+1),19,true)}
-export function placeName(p,lang='en'){return (types[p.type]?.[lang]||types[p.type]?.en||p.id)+(p.number?' '+p.number:'')}
+export function placeName(p,lang='en'){return (types[p.type]?.[lang]||types[p.type]?.en||p.id)+(p.type==='room'&&p.roomCode?' '+p.roomCode:(p.number?' '+p.number:'')+(p.roomCode?' · '+p.roomCode:''))}
 export function shortestPath(start,end,avoid=true){if(!places.some(p=>p.id===start)||!places.some(p=>p.id===end))throw Error('Unknown hospital place');const dist={[start]:0},prev={},pending=[start],done=new Set();while(pending.length){pending.sort((a,b)=>dist[a]-dist[b]);const u=pending.shift();if(done.has(u))continue;done.add(u);if(u===end)break;for(const e of edges){if(avoid&&e.stairs)continue;const v=e.from===u?e.to:e.to===u?e.from:null;if(!v)continue;const n=dist[u]+e.metres;if(n<(dist[v]??Infinity)){dist[v]=n;prev[v]=u;pending.push(v)}}}if(!Number.isFinite(dist[end]))return {path:[],distance:Infinity};let node=end,path=[];while(node){path.unshift(node);node=prev[node]}return {path,distance:dist[end]}}
 export const hospital={name:'City District Hospital',simulated:true,places,edges};
