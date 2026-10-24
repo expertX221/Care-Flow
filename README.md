@@ -53,7 +53,7 @@ Camera QR scanning uses BarcodeDetector when available. Speech recognition, lang
 
 ## Verification
 
-`npm test`: 30 automated queue, input, storage and graph checks. `python -m unittest discover -s python -p 'test_*.py'`: six estimator checks. `npx tsc --noEmit` checks TypeScript. `npm run test:api` creates an isolated fictional room and checks 17 API scenario groups against `BASE_URL` (defaults to production); use `CAREFLOW_TEST_STAFF_PIN` if configured. No test deletes unrelated data. See `reports/problem-statement-coverage.md` for coverage and remaining limits.
+`npm test`: 33 automated queue, input, storage and graph checks. `python -m unittest discover -s python -p 'test_*.py'`: six estimator checks. `npx tsc --noEmit` checks TypeScript. `npm run test:api` creates an isolated fictional room and checks 18 API scenario groups against `BASE_URL` (defaults to production); use `CAREFLOW_TEST_STAFF_PIN` if configured. No test deletes unrelated data. See `reports/problem-statement-coverage.md` for coverage and remaining limits.
 
 ## Next steps
 
@@ -69,3 +69,7 @@ Rooms use consistent alphanumeric codes (A101, A106, E107 and M204) in slips, st
 
 
 The language picker appears on every fresh opening/reload, even when a previous language preference is saved. The hospital image uses a clean asset without the old baked-in first-floor trail; the selected-floor route is drawn separately.
+
+## Patient entry flow
+
+Every fresh load asks for language, then presents Register a new visit or Log in to my visit. No patient token, assigned room, floor or personal dashboard is displayed before confirmation. Registering issues the patient’s own token; existing visits open through a saved server session or the private QR/code on the slip. Private codes include the original demo-room identifier for returning from another device. Seeded demo patients remain in staff/public queues but are never automatically assigned to a visitor. This is visit access, not an email/password account system. Emergency guidance stays accessible before entry.

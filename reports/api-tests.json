@@ -1,6 +1,6 @@
 {
-  "base": "https://care-flow-gmyueqp0g-create-projects1.vercel.app",
-  "room": "44b657d2-ccc9-42b1-8691-6771fd1f00e8",
+  "base": "https://care-flow-11ezluhrx-create-projects1.vercel.app",
+  "room": "0b82c044-603e-4bf0-ab98-899979e3d5d4",
   "results": [
     {
       "name": "Production HTML and image assets load",
@@ -32,6 +32,10 @@
     },
     {
       "name": "Five concurrent registrations retain unique tokens",
+      "status": "passed"
+    },
+    {
+      "name": "Visit login requires a private claim and restores the registered patient",
       "status": "passed"
     },
     {
@@ -71,6 +75,6 @@
       "status": "passed"
     }
   ],
-  "passed": 17,
+  "passed": 18,
   "failed": 0
 }
