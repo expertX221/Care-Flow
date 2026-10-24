@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {SLOTS,SLOT_CAPACITY,slotInventory,validateAppointment,startsAt,appointmentIcs,validateCode} from '../lib/appointments.mjs';
+const now=Date.parse('2026-10-24T00:00:00Z');
+const input={date:'2026-10-27',slot:'09:30',department:'general',patientName:'Demo Visitor',email:''};
+test('appointment slots are deterministic and capped',()=>{assert.equal(SLOTS.length,16);assert.equal(SLOTS[0],'09:00');assert.equal(SLOTS.at(-1),'16:30');assert.equal(slotInventory(['09:00','09:00','09:00','09:00','09:00'])['09:00'],0);assert.equal(slotInventory([])['09:00'],SLOT_CAPACITY)});
+test('valid booking parses IST and normalizes patient fields',()=>{const a=validateAppointment({...input,email:' DEMO@EXAMPLE.COM '},now);assert.equal(a.startsAt,'2026-10-27T04:00:00.000Z');assert.equal(a.email,'demo@example.com')});
+test('rejects invalid departments, times, names, and emails',()=>{for(const extra of [{department:'surgery'},{slot:'23:00'},{date:'2026-02-30'},{date:'2026-10-23'},{date:'2027-10-27'},{patientName:''},{email:'not-an-email'}])assert.throws(()=>validateAppointment({...input,...extra},now));assert.throws(()=>startsAt('2026-10-31','oops'))});
+test('calendar invitation contains UTC time, stable UID and a reminder',()=>{const x=appointmentIcs({...input,id:'8c640ed3-9f7c-469a-931f-937c90334003'});assert.match(x,/DTSTART:20261027T040000Z/);assert.match(x,/TRIGGER:-P1D/);assert.match(x,/UID:8c640ed3/);assert.ok(!x.includes('privateSecret'))});
+test('private appointment code format is checked',()=>{assert.throws(()=>validateCode(''));assert.throws(()=>validateCode('2468'));assert.equal(validateCode('Aa1234567890_abcdefghi'),'Aa1234567890_abcdefghi')});
