@@ -102,3 +102,9 @@ Existing `DATABASE_URL` and private `STAFF_PIN` must remain configured. Do not e
 ## Final consolidated release
 
 Includes patient live queue (counting currently served), six-language speech, accessible floor guide, staff analytics, booking/reschedule/cancel, calendar file and optional email reminder route. Staff requires a strong secret `STAFF_PIN` on production Vercel. Real email requires all three `RESEND_API_KEY`, verified `REMINDER_FROM_EMAIL` and `CRON_SECRET` and explicitly consenting email addresses. Without these, email sends are disabled and browser/calendar reminders remain. All examples are fictional and not real hospital appointments.
+
+### Registration and dashboard behavior
+
+- With a configured `DATABASE_URL`, registering a fictional patient creates a cloud-backed token and opens the dashboard. If the connected room loses its server connection, the attempt stays pending and does not claim to be confirmed.
+- Without `DATABASE_URL` in local VS Code, the browser runs a **local-only fictional demo**: registration opens the dashboard immediately, clearly labels the token as unsynced, and can resume after refreshing the same browser tab. Local tokens are not shared between browsers/devices or Vercel.
+- To test synchronized queues and demo appointment booking locally, put a **separate development database** connection in `.env.local`; never use real patient data.
