@@ -12,5 +12,25 @@ test('Dijkstra reroutes without stairs; ground-floor facilities reachable',()=>{
 test('bad inputs cannot insert invalid names or emergency priority',()=>{const s=initialState(now);assert.throws(()=>applyAction(s,{type:'register',name:'x',department:'general',priority:0}),/Invalid/);assert.throws(()=>applyAction(s,{type:'register',name:'Valid',department:'general',priority:2}),/Invalid/);assert.throws(()=>applyAction(s,{type:'register',name:'Valid',department:'bad',priority:0}),/Invalid/)});
 
 
-test('live queue count includes the patient in consultation and reacts to staff actions',()=>{let s=initialState(now);assert.deepEqual(liveQueuePosition(s,'A-022',now),{ahead:1,waitingAhead:0,currentlyServing:1,position:2,status:'waiting'});s=applyAction(s,{type:'call',department:'general'},now+240000);assert.equal(liveQueuePosition(s,'A-023',now+240000).ahead,1);s=applyAction(s,{type:'complete',token:'A-022'},now+300000);assert.equal(liveQueuePosition(s,'A-023',now+300000).ahead,0);s=applyAction(s,{type:'skip',token:'A-023'},now+301000);assert.equal(liveQueuePosition(s,'A-023').position,null);assert.equal(liveQueuePosition(s,'A-025').ahead,0)});
-test('other departments and finished patients are excluded',()=>{let s=initialState(now);s=applyAction(s,{type:'register',name:'Cardio guest',priority:0,department:'cardio'},now+1000);assert.equal(liveQueuePosition(s,'B-001',now+1000).ahead,0);assert.equal(liveQueuePosition(s,'A-021',now).position,null);assert.equal(liveQueuePosition(s,'MISSING',now).position,null)});
+test('live count includes current consultation, and changes on staff actions',()=>{
+ let s=initialState(now);
+ assert.deepEqual(liveQueuePosition(s,'A-022',now),{ahead:1,waitingAhead:0,currentlyServing:1,position:2,status:'waiting'});
+ assert.equal(liveQueuePosition(s,'A-024',now).ahead,4);
+ s=applyAction(s,{type:'call',department:'general'},now+240000);
+ assert.equal(liveQueuePosition(s,'A-022',now+240000).ahead,0);
+ assert.equal(liveQueuePosition(s,'A-023',now+240000).ahead,1);
+ s=applyAction(s,{type:'complete',token:'A-022'},now+300000);
+ assert.equal(liveQueuePosition(s,'A-023',now+300000).ahead,0);
+ s=applyAction(s,{type:'skip',token:'A-023'},now+301000);
+ assert.equal(liveQueuePosition(s,'A-023',now+301000).position,null);
+ assert.equal(liveQueuePosition(s,'A-025',now+301000).ahead,0);
+});
+test('live count stays within the right department and excludes completed/skipped patients',()=>{
+ let s=initialState(now);
+ s=applyAction(s,{type:'register',name:'Cardio guest',priority:0,department:'cardio'},now+1000);
+ assert.equal(liveQueuePosition(s,'B-001',now+1000).ahead,0);
+ assert.equal(liveQueuePosition(s,'MISSING').position,null);
+ assert.equal(liveQueuePosition(s,'A-021',now).ahead,0);
+ s=applyAction(s,{type:'skip',token:'A-022'},now+250000);
+ assert.equal(liveQueuePosition(s,'A-023',now+250000).ahead,1);
+});
