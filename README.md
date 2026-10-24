@@ -67,3 +67,5 @@ Camera failures release active tracks and show a translated token-entry fallback
 
 Rooms use consistent alphanumeric codes (A101, A106, E107 and M204) in slips, staff/board screens and map directions. Existing token IDs remain unchanged. Stop speaking cancels current and queued speech and is available in the footer and dialogs. Selecting a floor changes the animated illustration trail, moving marker and destination label; reduced-motion settings retain a static route. The illustration remains a schematic preview; precise graph directions are in Find a place.
 
+
+The language picker appears on every fresh opening/reload, even when a previous language preference is saved. The hospital image uses a clean asset without the old baked-in first-floor trail; the selected-floor route is drawn separately.
