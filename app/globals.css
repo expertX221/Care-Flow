@@ -34,3 +34,21 @@ html:not([lang="en"]) .today{display:none}
 .hospital-image{object-position:center}.illustration-trail{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;animation:float 9s ease-in-out infinite;overflow:visible}.trail-halo{fill:none;stroke:#fff;stroke-width:10;stroke-linejoin:round;opacity:.95}.trail-line{fill:none;stroke:#174fff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:11 7;animation:trail-flow 1.3s linear infinite;filter:drop-shadow(0 0 5px #3c8bff)}.floor-route-label{position:absolute;left:38%;z-index:3;display:flex;align-items:center;gap:6px;padding:9px 12px;max-width:60%;background:#fff;color:#1039b5;border:1px solid #aec3ff;border-radius:12px;box-shadow:0 5px 20px #113ca125;font-size:14px;font-weight:700;pointer-events:none}.route-label-2{top:23%}.route-label-1{top:48%}.route-label-0{top:76%}.stop-speaking{color:#1239b8;border:1px solid #acbdf5}.room strong{white-space:nowrap}.ps-accessible .room strong{font-size:25px}.ps-accessible .floor-route-label{font-size:14px!important;overflow-wrap:anywhere}.reduce-motion .illustration-trail,.reduce-motion .trail-line{animation:none!important}.reduce-motion .trail-dot{display:none}@keyframes trail-flow{to{stroke-dashoffset:-36}}@media(prefers-reduced-motion:reduce){.illustration-trail,.trail-line{animation:none!important}.trail-dot{display:none}}@media(max-width:760px){.floor-route-label{left:28%;max-width:68%;padding:7px;font-size:12px!important}.ps-accessible .floor-route-label{font-size:12px!important}}
 .ps-accessible .serving-current{flex-wrap:wrap}.ps-accessible .serving-current>div:nth-child(3){flex-shrink:0}.ps-accessible .serving-current>div:nth-child(3)>strong{white-space:nowrap}
 .entry-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:35px;min-height:650px;padding:55px 0}.entry-layout h1{font-size:clamp(36px,4vw,58px);margin:14px 0 22px}.entry-layout p{line-height:1.7;margin:18px 0;color:#536084}.entry-layout>img{width:100%;max-width:630px}.entry-actions{display:flex;gap:16px;flex-wrap:wrap;margin:30px 0}.entry-actions button{min-height:64px;padding:18px 24px;white-space:normal;text-align:left}.entry-note{display:flex;gap:12px;align-items:flex-start;background:#eef2ff;padding:18px;border-radius:16px}.entry-note svg{flex-shrink:0}.private-visit-code input{font-family:monospace;overflow-wrap:anywhere}.ps-accessible .entry-layout{overflow-wrap:anywhere}@media(max-width:900px){.entry-layout{grid-template-columns:1fr;padding-top:32px;gap:15px;min-height:0}.entry-layout>img{max-width:500px;justify-self:center}.entry-actions{flex-direction:column}.entry-actions button{width:100%}}
+
+/* Floor guide: separated room rows and orthogonal corridors.  The blue
+   route shares the exact same geometry as the pale background corridors. */
+.floor-plan-scroll{overflow-x:auto;overscroll-behavior-x:contain;margin:18px 0;border-radius:16px;background:#fbfcff;border:1px solid #e1e8ff}
+.floor-plan-scroll:focus-visible{outline:3px solid #2054ff;outline-offset:2px}
+.floor-plan-scroll .floor-plan{width:100%;max-width:720px;max-height:none;margin:0 auto;background:transparent;border-radius:0}
+.floor-plan-outline{fill:#fbfcff;stroke:#b9c8f2;stroke-width:.8}
+.floor-plan-walkway{fill:none;stroke:#dce4f6;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.floor-plan-active-route{fill:none;stroke:#2054ff;stroke-width:1.5;stroke-dasharray:2.2 1.2;stroke-linecap:round;stroke-linejoin:round}
+.floor-plan-room{fill:#edf2ff;stroke:#bacaf0;stroke-width:.85}
+.floor-plan-room-label{fill:#122c80;font-size:2.55px;font-weight:600;pointer-events:none}
+.floor-plan-place{cursor:pointer}
+.floor-plan-place.is-destination .floor-plan-room{fill:#2054ff;stroke:#153ec3}
+.floor-plan-place.is-destination .floor-plan-room-label{fill:#fff}
+.floor-plan-place.is-start:not(.is-destination) .floor-plan-room{stroke:#159eab;stroke-width:1.1}
+.floor-plan-place:focus-visible{outline:none}
+.floor-plan-place:focus-visible .floor-plan-room{stroke:#1229a2;stroke-width:1.4;stroke-dasharray:1 1}
+@media(max-width:640px){.floor-plan-scroll .floor-plan{min-width:600px}.floor-plan-scroll{scrollbar-width:thin}}
