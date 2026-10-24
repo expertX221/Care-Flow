@@ -7,6 +7,7 @@ import {places,edges,shortestPath,placeName,landmarks,floorNames} from './data/h
 import {floorPlanPoint,floorPlanSegmentPath} from './data/floor-plan.mjs';
 import {extendedDepartments} from './data/departments.mjs';
 import {languages,dictionaries} from './i18n';
+import {englishLanguageNames} from '../lib/language-voice.mjs';
 import {User} from '@phosphor-icons/react/dist/csr/User';
 import {MapPin} from '@phosphor-icons/react/dist/csr/MapPin';
 import {FirstAid} from '@phosphor-icons/react/dist/csr/FirstAid';
@@ -25,7 +26,7 @@ import {Users} from '@phosphor-icons/react/dist/csr/Users';
 import {ArrowsClockwise} from '@phosphor-icons/react/dist/csr/ArrowsClockwise';
 export function EmergencySigns({lang,onEmergency}:{lang:string;onEmergency:()=>void}){const e=extra[lang];return <section className="emergency-signs"><Warning size={27} weight="fill"/><div><strong>{e.signs}</strong><p>{e.signList}</p><button className="emergency" onClick={onEmergency}><FirstAid size={21}/>{e.urgent}</button></div></section>}
 export function HomeActions({lang,onRegister,onSlip,onMap,onEmergency}:{lang:string;onRegister:()=>void;onSlip:()=>void;onMap:()=>void;onEmergency:()=>void}){const e=extra[lang];return <><div className="home-actions">{[[e.registration,User,onRegister],[e.haveSlip,Printer,onSlip],[e.findPlace,MapPin,onMap],[e.urgent,FirstAid,onEmergency]].map(([label,Icon,action]:any)=><button key={label} onClick={action}><Icon size={27} weight="duotone"/><span>{label}</span></button>)}</div><p className="term-explainer">{e.explain}</p></>}
-export function LanguagePicker({onChoose}:{onChoose:(value:string)=>void}){return <><h2 id="modal-title">{extra.en.chooseLanguage} / {extra.hi.chooseLanguage}</h2><div className="language-options">{languages.map(([code,label])=><button className="secondary" key={code} onClick={()=>onChoose(code)}><SpeakerHigh size={22}/>{label}</button>)}</div></>}
+export function LanguagePicker({onChoose}:{onChoose:(value:string)=>void}){return <><h2 id="modal-title">{extra.en.chooseLanguage} / {extra.hi.chooseLanguage}</h2><p className="language-prompt">Tap a language to hear its name · भाषा सुनने के लिए अपनी भाषा चुनें</p><div className="language-options">{languages.map(([code,label,locale])=><button type="button" className="secondary language-choice" key={code} onClick={()=>onChoose(code)}><SpeakerHigh size={22}/><span><strong lang={locale}>{label}</strong><small lang="en">{englishLanguageNames[code]}</small></span></button>)}</div></>}
 export function Registration({lang,assisted,setAssisted,onSubmit,onEmergency,onHelp,say,busy}:{lang:string;assisted:boolean;setAssisted:(x:boolean)=>void;onSubmit:(data:any)=>Promise<any>;onEmergency:()=>void;onHelp:()=>void;say:(x:string)=>void;busy:boolean}){
  const e=extra[lang],t=dictionaries[lang],u=deviceText[lang];const requestId=useRef<string>(null);const recognition=useRef<any>(null);const [voiceError,setVoiceError]=useState(''),[listening,setListening]=useState(false);const [step,setStep]=useState(0),[form,setForm]=useState({name:'',age:'',gender:'other',phone:'',department:'general',priority:0});const set=(key:string,value:any)=>setForm(f=>({...f,[key]:value}));const questions=[e.name,e.age,e.gender,e.phone,t.department];
  useEffect(()=>{if(assisted)say(questions[step])},[step,assisted,lang]);
