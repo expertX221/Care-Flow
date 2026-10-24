@@ -107,3 +107,5 @@ html:not([lang="en"]) .today{display:none}
 .queue-live-details{font-size:13px;line-height:1.5;color:#455775;padding:7px 1px 11px}
 .queue-live-details strong{font-weight:800;color:#143c90}
 @media(max-width:550px){.queue-live-heading small{margin-inline-start:0;flex-basis:100%}}
+
+.appointment-optional{border:1px solid #dce5f5;border-radius:16px;background:#fff;margin:16px 0;padding:12px 16px}.appointment-optional summary{cursor:pointer;font-weight:700;color:#2445a2;padding:7px;list-style-position:inside}.appointment-optional>p{color:#64748b;font-size:13px;line-height:1.5;padding:9px}.queue-notification-control{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 12px}.queue-notification-control button{min-height:42px;display:flex;align-items:center;gap:7px}.queue-notification-control small{color:#52607b;font-size:12px;line-height:1.5}
