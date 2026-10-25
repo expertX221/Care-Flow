@@ -115,3 +115,9 @@ Includes patient live queue (counting currently served), six-language speech, ac
 - For Waiting tickets, staff can **Call to room A101** (or the assigned department room) only when the doctor is Available and the current consultation has been completed. Automatic **Call next** remains available.
 - **Send to end** requeues a waiting or called token at the back of its priority queue. It never completes the patient's visit; staff must use **Complete visit** for that.
 - Staff-only permissions are enforced on the server, with audit history. Existing completed tokens are not automatically reopened by deploying the fix.
+
+## Same consultation room, same cloud demo room (2026-10-25)
+
+A101 identifies a *physical consultation room*, not the synchronized CareFlow demo session. To show four fictional visitors on multiple screens, staff sign in to a connected demo room and select **+ Add 4 demo patients · A101** in the General Medicine card. This writes the four new General Medicine tokens to that demo room's PostgreSQL state.
+
+To see the updates on another device, select **Connect another screen** and share its full invitation URL (including `?room=<UUID>`); the other device should open that URL, or paste it in **Join an existing shared demo room**. A brand-new visit to the generic website creates a *different* cloud demo room, even if its doctor is also in A101. Screens in the same room refresh every ~1.5 seconds while visible; background browser tabs pause until refocused. Staff authorization remains required for adding demo patients. Do not use real patient information.
