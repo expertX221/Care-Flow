@@ -108,3 +108,10 @@ Includes patient live queue (counting currently served), six-language speech, ac
 - With a configured `DATABASE_URL`, registering a fictional patient creates a cloud-backed token and opens the dashboard. If the connected room loses its server connection, the attempt stays pending and does not claim to be confirmed.
 - Without `DATABASE_URL` in local VS Code, the browser runs a **local-only fictional demo**: registration opens the dashboard immediately, clearly labels the token as unsynced, and can resume after refreshing the same browser tab. Local tokens are not shared between browsers/devices or Vercel.
 - To test synchronized queues and demo appointment booking locally, put a **separate development database** connection in `.env.local`; never use real patient data.
+
+## Staff queue controls (October 25, 2026)
+
+- **Completed** tickets (for example A-026) remain in the history. Staff may select **Reopen visit** and confirm to return them to Waiting while preserving their token, department and access code.
+- For Waiting tickets, staff can **Call to room A101** (or the assigned department room) only when the doctor is Available and the current consultation has been completed. Automatic **Call next** remains available.
+- **Send to end** requeues a waiting or called token at the back of its priority queue. It never completes the patient's visit; staff must use **Complete visit** for that.
+- Staff-only permissions are enforced on the server, with audit history. Existing completed tokens are not automatically reopened by deploying the fix.
