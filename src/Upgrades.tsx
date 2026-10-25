@@ -12,7 +12,7 @@ export function VoiceAssistant({lang,say,token,ahead,room,onMap,onRegister}:{lan
   <div className="upgrade-heading"><SpeakerHigh size={24}/><h2>{c.assist}</h2></div>
   <div className="upgrade-actions">
    <button className="secondary" onClick={()=>say(spoken)}><SpeakerHigh size={19}/>{token?c.queue:c.hear}</button>
-   <button className="secondary" onClick={()=>say(c.hello)}><SpeakerHigh size={19}/>{c.register}</button>
+   {token&&<button className="secondary" onClick={()=>say(c.hello)}><SpeakerHigh size={19}/>{c.hear}</button>}
    <button className="secondary" onClick={()=>{say(c.routeHint);onMap()}}><MapPin size={19}/>{c.route}</button>
    {!token&&<button className="secondary" onClick={onRegister}><ArrowRight size={19}/>{c.register}</button>}
   </div><p className="upgrade-note">{c.queueHint}</p>

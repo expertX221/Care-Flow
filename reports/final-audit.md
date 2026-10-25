@@ -27,7 +27,9 @@ Baseline: supplied staff-workspace ZIP, including changes not yet present on Git
 - 93 Node tests passed, including 11 added regression/security tests.
 - Ten database integration scenarios passed on isolated Neon branch br-raspy-feather-b4pl43e4. Includes concurrent registration, slot capacity, parallel private booking lookups, anonymous action rejection and session revocation. No production data was reset.
 - Fresh Chrome live-site inspection showed a staff PIN gate after a blocking language popup. Anonymous dashboard bypass was not reproduced; existing staff-session reuse was a plausible explanation, not a confirmed cause.
-- Local build/browser verification and GitHub CI results are recorded in the handoff once complete.
+- GitHub Actions run 40168919644 passed dependency installation, all 93 Node tests, six Python tests and a clean production build for commit 9dbb34efb896a0104c91234d18dd2904f61ed2fc. Vercel preview deployed successfully.
+- Chrome preview verification: staff gate opens without a language popup, old 2468 PIN is rejected, K Ravi registers as token A-026 with name preserved, both wait panels agree at 20–40 minutes, and changing the destination from A101 to Pharmacy changes the floor, path and distance from 86m to 51m.
+- Browser verification found misleading alert-step copy and unnecessary inner scrolling on the guide; corrected in the follow-up. Final build results are linked in the PR.
 
 ## Deferred / limits
 
