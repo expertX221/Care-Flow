@@ -3,8 +3,9 @@ import {createHash,randomBytes} from 'node:crypto';
 import {initialState,applyAction,upgradeState} from './queue.mjs';
 import {rateLimitKey,MAX_FAILURES,WINDOW_MS,staffPinMatches} from './security-upgrades.mjs';
 import {hasPatientAccess,addPatientAccess} from './patient-access.mjs';
+import {postgresConnectionString} from './database-url.mjs';
 const globalDb=globalThis as unknown as {careflowPool?:Pool};
-export function pool(){if(!process.env.DATABASE_URL)throw Error('Database connection is not configured');return globalDb.careflowPool??=(new Pool({connectionString:process.env.DATABASE_URL,max:3,idleTimeoutMillis:20000,connectionTimeoutMillis:10000}));}
+export function pool(){if(!process.env.DATABASE_URL)throw Error('Database connection is not configured');return globalDb.careflowPool??=(new Pool({connectionString:postgresConnectionString(process.env.DATABASE_URL),max:3,idleTimeoutMillis:20000,connectionTimeoutMillis:10000}));}
 export const hash=(x:string)=>createHash('sha256').update(x).digest('hex');
 export const cookieName=(id:string,staff=false)=>(staff?'cf_staff_':'cf_patient_')+id;
 function cookie(request:Request,name:string){const raw=(request.headers.get('cookie')||'').split(';').map(x=>x.trim()).find(x=>x.startsWith(name+'='));try{return raw?decodeURIComponent(raw.slice(name.length+1)):''}catch{return ''}}
