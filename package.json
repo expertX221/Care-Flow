@@ -11,20 +11,22 @@
     "test:api": "node tests/api-smoke.mjs"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "next": "15.5.28",
+    "pg": "^8.16.3",
+    "qrcode": "^1.5.4",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "pg": "^8.16.3",
-    "@phosphor-icons/react": "^2.1.10",
-    "qrcode": "^1.5.4"
+    "three": "0.180.0"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
     "@types/node": "^22.0.0",
     "@types/pg": "^8.15.5",
-    "@types/qrcode": "^1.5.6"
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@types/three": "0.180.0",
+    "typescript": "^5.9.3"
   },
   "overrides": {
     "source-map-js": "1.2.2",

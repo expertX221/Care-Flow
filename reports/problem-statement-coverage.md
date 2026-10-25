@@ -10,8 +10,8 @@ Updated 25 October 2026. See final-audit.md for verification.
 | Estimates | One EWMA range, explicit delays, ignores consultations under 30 seconds |
 | Alerts | Threshold crossing into 1–3 ahead, actual count, browser-only delivery |
 | Navigation | Destination-specific graph guide on dashboard and Find; decorative image only |
-| Appointments | Eight departments, 09:00–13:30 slots, capacity locks, private code access |
+| Appointments | Eight departments, 09:00–13:30 slots, capacity locks, private code access and idempotent appointment-to-queue check-in |
 | Demo utilities | Check-in exposes reset and automatic calls |
 | Accessibility | Six languages, step-free guide, keyboard map controls; full assistive-device audit pending |
 
-No SMS, locked-phone push, genuine 3D geometry, named staff roles, Bhashini, or clinical validation is claimed. Bookings remain separate from walk-in check-in.
+No SMS, locked-phone push, named staff roles, Bhashini, or clinical validation is claimed. Local features include verified family switching, appointment check-in, staff recall/no-show timers and lift-outage routing.

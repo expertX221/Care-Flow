@@ -17,3 +17,6 @@ CREATE TABLE IF NOT EXISTS careflow_appointments (
 );
 CREATE INDEX IF NOT EXISTS careflow_appointments_room_slot_idx ON careflow_appointments(room_id,department,starts_at,status);
 CREATE INDEX IF NOT EXISTS careflow_appointments_reminder_idx ON careflow_appointments(starts_at,status,reminded_at) WHERE email IS NOT NULL;
+
+-- Additive appointment-to-queue check-in; original booking status constraint remains valid.
+ALTER TABLE careflow_appointments ADD COLUMN IF NOT EXISTS queue_token text, ADD COLUMN IF NOT EXISTS checked_in_at timestamptz;

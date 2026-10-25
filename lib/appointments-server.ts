@@ -1,5 +1,8 @@
+import {appointmentCheckInWindow} from './local-workflow.mjs';
+import {applyAction,upgradeState} from './queue.mjs';
+import {addPatientAccess} from './patient-access.mjs';
 import {randomBytes,randomUUID} from 'node:crypto';
-import {consumeLimit,pool,getRoom,actors,hash,requestIp,blockedAttempt,failedAttempt,clearAttempt} from './server';
+import {consumeLimit,pool,getRoom,actors,hash,requestIp,blockedAttempt,failedAttempt,clearAttempt,publicState,familyMetadata} from './server';
 import {validateAppointment,validateCode,slotInventory,SLOT_CAPACITY,DEPARTMENTS,SLOTS,startsAt} from './appointments.mjs';
 export class BookingError extends Error{status:number;constructor(message:string,status=400){super(message);this.status=status}}
 const checkedAppointment=(raw:any)=>{try{return validateAppointment(raw)}catch(error){throw new BookingError(error instanceof Error?error.message:'Invalid appointment fields',400)}};
@@ -11,10 +14,11 @@ export async function appointmentsSchema(){
  status text NOT NULL DEFAULT 'booked',created_at timestamptz NOT NULL DEFAULT now(),
  updated_at timestamptz NOT NULL DEFAULT now(),reminded_at timestamptz,
  CONSTRAINT careflow_booking_status CHECK(status IN ('booked','cancelled','completed')))`);
+ await pool().query(`ALTER TABLE careflow_appointments ADD COLUMN IF NOT EXISTS queue_token text, ADD COLUMN IF NOT EXISTS checked_in_at timestamptz`);
  await pool().query(`CREATE INDEX IF NOT EXISTS careflow_appointments_room_slot_idx ON careflow_appointments(room_id,department,starts_at,status)`);
  await pool().query(`CREATE INDEX IF NOT EXISTS careflow_appointments_reminder_idx ON careflow_appointments(starts_at,status,reminded_at) WHERE email IS NOT NULL`);
 }
-function rowView(row:any){const date=new Date(row.starts_at);const local=new Date(date.getTime()+19800000).toISOString();return {id:row.id,department:row.department,date:local.slice(0,10),slot:local.slice(11,16),patientName:row.patient_name,status:row.status,reminderEmailEnabled:!!row.email,createdAt:row.created_at};}
+function rowView(row:any){const date=new Date(row.starts_at);const local=new Date(date.getTime()+19800000).toISOString();return {id:row.id,department:row.department,date:local.slice(0,10),slot:local.slice(11,16),patientName:row.patient_name,status:row.status,reminderEmailEnabled:!!row.email,createdAt:row.created_at,queueToken:row.queue_token||null,checkedInAt:row.checked_in_at||null};}
 async function roomExists(roomId:string){if(!validRoom(roomId))throw new BookingError('Invalid room ID');if(!await getRoom(roomId))throw new BookingError('Room not found',404)}
 async function authorizedStaff(roomId:string,request:Request){const room=await getRoom(roomId);if(!room||!actors(request,room,roomId).staff)throw new BookingError('Staff login required',403)}
 async function verifyOwn(roomId:string,id:string,code:any,request:Request,client:any){
@@ -39,7 +43,7 @@ export async function createAppointment(roomId:string,raw:any,request:Request){a
  await client.query('COMMIT');return {...details,id,code,status:'booked',reminderEmailEnabled:!!details.email};
  }catch(e){await client.query('ROLLBACK');throw e}finally{client.release()}}
 export async function manageAppointment(roomId:string,request:Request,body:any){await roomExists(roomId);await appointmentsSchema();const action=body?.action;if(action==='staff-list'){await authorizedStaff(roomId,request);const r=await pool().query('SELECT * FROM careflow_appointments WHERE room_id=$1 ORDER BY starts_at DESC LIMIT 120',[roomId]);return {appointments:r.rows.map(rowView)}}
- if(!['lookup','cancel','reschedule','complete'].includes(action))throw new BookingError('Unknown appointment action');
+ if(!['lookup','cancel','reschedule','complete','check-in'].includes(action))throw new BookingError('Unknown appointment action');
  if(!validRoom(body?.id))throw new BookingError('Invalid booking reference');
  if(action==='complete')await authorizedStaff(roomId,request);
  else if(await blockedAttempt('patient',roomId,request,'appointment:'+body.id))throw new BookingError('Too many attempts. Try again later.',429);
@@ -53,6 +57,22 @@ export async function manageAppointment(roomId:string,request:Request,body:any){
   if(!row)throw new BookingError('Booking not found',404);authenticated=action!=='complete';
   if(action==='lookup'){await client.query('COMMIT');return {appointment:rowView(row)}}
   if(row.status!=='booked')throw new BookingError('Only active bookings can be changed',409);
+  if(action==='check-in'){
+   if(!row.queue_token&&!appointmentCheckInWindow(new Date(row.starts_at).toISOString()))throw new BookingError('Check in on the appointment day, within one hour before or after the slot.',409);
+   const roomRow=await client.query('SELECT state FROM careflow_demo_rooms WHERE id=$1 FOR UPDATE',[roomId]);
+   if(!roomRow.rows.length)throw new BookingError('Room not found',404);
+   let state=upgradeState(roomRow.rows[0].state);const actor=actors(request,state,roomId);
+   let token=row.queue_token;
+   if(token&&!state.patients.some(p=>p.id===token&&p._appointmentId===row.id))throw new BookingError('This demo queue was reset. Ask reception to restore the visit.',409);
+   if(!token){state=applyAction(state,{type:'register',name:row.patient_name,department:row.department,priority:0});token=state.lastToken;state.patients.find(p=>p.id===token)._appointmentId=row.id;await client.query('UPDATE careflow_appointments SET queue_token=$3,checked_in_at=now(),updated_at=now() WHERE room_id=$1 AND id=$2',[roomId,row.id,token]);}
+   const claim=randomBytes(24).toString('base64url');addPatientAccess(state.patients.find(p=>p.id===token),hash(claim));
+   await client.query('UPDATE careflow_demo_rooms SET state=$2,updated_at=now() WHERE id=$1',[roomId,JSON.stringify(state)]);
+   await client.query('COMMIT');
+   const family=[...new Set([...actor.family,token])];
+   return {appointment:{...rowView(row),queueToken:token,checkedInAt:row.checked_in_at||new Date().toISOString()},state:publicState(state,{staff:false,mine:token,family}),mine:token,claim,family:familyMetadata(state,family)};
+  }
+  if(row.queue_token&&['cancel','reschedule'].includes(action))throw new BookingError('This appointment is checked in. Ask staff to manage the active queue visit.',409);
+
   if(action==='cancel'||action==='complete'){const status=action==='cancel'?'cancelled':'completed';await client.query('UPDATE careflow_appointments SET status=$3,updated_at=now() WHERE room_id=$1 AND id=$2',[roomId,row.id,status]);await client.query('COMMIT');return {appointment:{...rowView(row),status}}}
   const next=checkedAppointment({...body,patientName:row.patient_name,email:row.email||''});
   if(await availableCount(client,roomId,next.department,next.startsAt,row.id)>=SLOT_CAPACITY)throw new BookingError('That slot is full',409);

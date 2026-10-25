@@ -34,3 +34,9 @@ Baseline: supplied staff-workspace ZIP, including changes not yet present on Git
 ## Deferred / limits
 
 This is not a claim that all ~55 report suggestions were implemented. Named staff roles/SSO, locked-phone push/SMS, email verification, family switching, booking-to-queue check-in, automatic no-show decisions, lift outages, actual 3D geometry, Bhashini, ABHA, retention automation and physical-device accessibility/load testing remain out of scope for this repair pass. Runtime schema initialization remains for compatibility; schema.sql is the deployment reference. No live production promotion is implied by a review branch or ZIP.
+
+## Follow-up: local features, no external integrations
+
+Implemented appointment-to-queue check-in (IST time window, private booking code, idempotent transaction, linked consultation completion), eight-visit family switching with bounded HttpOnly credentials, explicit forget-device action, staff recall plus a five-minute no-show response timer, shared lift availability with safe no-route guidance, collapsed lift steps, and an optional real Three.js schematic sharing the 2D geometry/path data. Existing staff-only demo utilities are no longer visible in the anonymous appointment panel.
+
+109 automated tests pass, including 16 additional local/3D cases. Eleven new isolated database checks passed; see local-features-database-checks.json. These supersede the earlier deferrals of family switching, booking check-in, recall/no-show, lift outages and 3D geometry. Named staff roles, privacy-retention automation and full physical-device accessibility/load testing are still not implemented. External integrations remain excluded by user preference. Final clean build and browser results are recorded in the PR/handoff.
