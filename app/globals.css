@@ -113,3 +113,11 @@ html:not([lang="en"]) .today{display:none}
 .queue-row-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;min-width:160px}
 .queue-row-actions .table-action{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;min-height:40px;white-space:normal;text-align:center}
 .queue-row-actions .table-action:disabled{opacity:.52;cursor:not-allowed}
+
+/* Explicit shared cloud demo room links: needed for cross-device queue synchronization. */
+.join-room-entry{display:inline-flex;align-items:center;gap:.5rem;margin-top:.65rem;padding:.65rem 1rem}
+.shared-room-pill{display:inline-flex;align-items:center;gap:.3rem;max-width:100%;overflow-wrap:anywhere}
+.add-room-demo{display:block;width:100%;min-height:42px;margin:.65rem 0;white-space:normal}
+.shared-room-code{word-break:break-all}
+.join-shared-room-form{margin-top:1rem;display:flex;flex-direction:column;gap:.5rem}
+.join-shared-room-form input{width:100%}
