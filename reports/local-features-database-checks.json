@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-25T06:54:00.697Z",
+  "environment": "isolated Neon audit branch",
+  "branch": "br-raspy-feather-b4pl43e4",
+  "passed": 11,
+  "checks": [
+    "register two family members and authenticate both saved visits",
+    "forged family secret is excluded and anonymous state stays redacted",
+    "public users cannot change lift availability or recall patients",
+    "staff lift outage synchronizes without changing the queue",
+    "recall changes announcement sequence without completing the visit",
+    "check-in before allowed day is rejected",
+    "concurrent appointment check-in creates exactly one token",
+    "private check-in code is required and active visits cannot reschedule",
+    "appointment visit joins the saved family without exposing internal booking ID",
+    "completing consultation completes the linked appointment",
+    "staff logout still revokes server session"
+  ]
+}
