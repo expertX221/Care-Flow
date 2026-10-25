@@ -9,3 +9,7 @@ node_modules/
 __pycache__/
 .vercel
 .env*.local
+
+*.tsbuildinfo
+lib/__audit_*.mjs
+work-db-check.mjs

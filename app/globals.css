@@ -109,7 +109,7 @@ html:not([lang="en"]) .today{display:none}
 @media(max-width:550px){.queue-live-heading small{margin-inline-start:0;flex-basis:100%}}
 
 .appointment-optional{border:1px solid #dce5f5;border-radius:16px;background:#fff;margin:16px 0;padding:12px 16px}.appointment-optional summary{cursor:pointer;font-weight:700;color:#2445a2;padding:7px;list-style-position:inside}.appointment-optional>p{color:#64748b;font-size:13px;line-height:1.5;padding:9px}.queue-notification-control{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 12px}.queue-notification-control button{min-height:42px;display:flex;align-items:center;gap:7px}.queue-notification-control small{color:#52607b;font-size:12px;line-height:1.5}
-/* Multiple per-token staff actions remain usable on small screens. */
+/* Staff queue: display token-specific actions without overlaps on narrow devices. */
 .queue-row-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;min-width:160px}
 .queue-row-actions .table-action{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;min-height:40px;white-space:normal;text-align:center}
 .queue-row-actions .table-action:disabled{opacity:.52;cursor:not-allowed}
@@ -122,10 +122,19 @@ html:not([lang="en"]) .today{display:none}
 .join-shared-room-form{margin-top:1rem;display:flex;flex-direction:column;gap:.5rem}
 .join-shared-room-form input{width:100%}
 
-/* Staff workspace: separate check-in, queue, history and activity controls */
-.staff-workspace-tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.3rem 0}
-.staff-workspace-tabs button{padding:.7rem 1rem;border:1px solid #d9e1ed;border-radius:10px;background:#fff;color:#172e50;min-height:44px;cursor:pointer}
-.staff-workspace-tabs button.active{background:#2349bf;color:#fff}
-.staff-workflow-guide{padding:1.3rem;background:#f6f9ff;border:1px solid #e0e7f0;border-radius:16px;margin:1rem 0}
-.staff-demo-tools{padding:1rem;margin-top:1rem}.staff-demo-tools button{margin:.5rem}
-@media(max-width:600px){.staff-workspace-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Clear staff workspace: one operational task per tab, safe on mobile. */
+.staff-workspace-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin:1.1rem 0 1.5rem;border-bottom:1px solid #dde4f0;padding-bottom:.75rem}
+.staff-workspace-tabs button{border:1px solid #d7e1f0;background:#fff;color:#23375c;border-radius:12px;padding:.7rem .95rem;min-height:44px;font-weight:650;cursor:pointer}
+.staff-workspace-tabs button.active{color:#fff;background:#173cb6;border-color:#173cb6}
+.staff-tab-count{display:inline-flex;margin-left:.45rem;min-width:1.4rem;border-radius:25px;background:#e9efff;color:#233d8a;justify-content:center;padding:.1rem .35rem}
+.staff-workflow-guide{border:1px solid #dbe4f2;background:#f8fbff;border-radius:18px;padding:1.3rem;margin-bottom:1.2rem}
+.staff-workflow-guide h2{margin:0 0 .65rem}.staff-workflow-guide ol{padding-left:1.5rem;line-height:1.7}
+.staff-header-actions{display:flex;flex-wrap:wrap;gap:.5rem}.staff-tip{font-size:.93em;color:#51617b;margin:.65rem 0 1rem}
+.staff-demo-tools{border:1px solid #dbe4f2;border-radius:14px;padding:1.1rem;margin:1.1rem 0}.staff-demo-tools>summary{font-weight:700;cursor:pointer}.staff-demo-tools button{margin:.5rem .5rem .5rem 0}
+.staff-recent-checkins>div{display:flex;flex-wrap:wrap;gap:.85rem;padding:.75rem .5rem;border-bottom:1px solid #e6ecf4}
+.staff-doctor-settings{padding:.5rem 0}.staff-doctor-settings summary{cursor:pointer;font-weight:600}.staff-doctor-settings label{display:block;margin-top:.55rem}
+.staff-transfer-label{font-weight:550;display:inline-flex;align-items:center;gap:.4rem}.staff-transfer-label select{max-width:180px;min-height:40px}
+.staff-remove{border:1px solid #f2c5c5!important;color:#9a2732!important;background:#fffafa!important}
+@media(max-width:650px){.staff-workspace-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.staff-workspace-tabs button{padding:.6rem .3rem;font-size:.91em}.staff-workflow-guide{padding:1rem}.staff-header-actions{width:100%}}
+
+.dashboard-guide{min-width:0;max-height:860px;overflow:auto;background:#fff;border-radius:24px;padding:18px}.dashboard-guide .hospital-guide{width:100%}@media(max-width:700px){.dashboard-guide{max-height:none;padding:10px}}

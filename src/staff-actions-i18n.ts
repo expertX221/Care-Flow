@@ -1,4 +1,4 @@
-// Staff-only queue actions, including the destination consultation room.
+// Staff-only queue actions; keep the room assignment visible at the point of calling.
 export const staffActionText:Record<string,{callToRoom:string,reopenVisit:string,reopenConfirm:string,sendToEnd:string,completeFirst:string}>={
  en:{callToRoom:'Call to room',reopenVisit:'Reopen visit',reopenConfirm:'Reopen this completed visit and return it to the waiting queue?',sendToEnd:'Send to end',completeFirst:'Finish the current consultation before calling this ticket'},
  hi:{callToRoom:'कमरे में बुलाएँ',reopenVisit:'विज़िट फिर खोलें',reopenConfirm:'पूरी हुई विज़िट को फिर से प्रतीक्षा सूची में डालें?',sendToEnd:'कतार के अंत में भेजें',completeFirst:'इस टिकट को बुलाने से पहले वर्तमान परामर्श पूरा करें'},

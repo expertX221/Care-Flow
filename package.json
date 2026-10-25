@@ -7,7 +7,7 @@
     "dev": "next dev --hostname 0.0.0.0",
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
-    "test": "node --test tests/queue.test.mjs tests/regression.test.mjs tests/problem-statement.test.mjs tests/device.test.mjs tests/visit-entry.test.mjs tests/floor-plan.test.mjs tests/language-voice.test.mjs tests/upgrade-insights.test.mjs tests/appointments.test.mjs tests/registration-flow.test.mjs tests/patient-access.test.mjs tests/database-url.test.mjs tests/staff-queue-actions.test.mjs tests/shared-room.test.mjs tests/staff-workflow.test.mjs",
+    "test": "node --test tests/*.test.mjs",
     "test:api": "node tests/api-smoke.mjs"
   },
   "dependencies": {

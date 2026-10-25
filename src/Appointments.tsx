@@ -1,7 +1,8 @@
 'use client';
 import {useCallback,useEffect,useMemo,useState} from 'react';
 import {appointmentIcs,DEPARTMENTS,SLOTS} from '../lib/appointments.mjs';
-const names:Record<string,string>={general:'General Medicine',cardio:'Cardiology',ortho:'Orthopaedics',pediatric:'Paediatrics'};
+import {extendedDepartments} from './data/departments.mjs';
+const names:Record<string,string>=Object.fromEntries(extendedDepartments.map(d=>[d.id,d.labels.en]));
 type A={id:string;code?:string;department:string;date:string;slot:string;patientName:string;status:string;reminderEmailEnabled?:boolean};
 const todayIST=()=>new Date(Date.now()+19800000).toISOString().slice(0,10);
 const defaultDate=()=>new Date(Date.now()+19800000+86400000).toISOString().slice(0,10);
